@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "name": "Aarav Sharma",
+    "age": 20,
+    "course": "Computer Science",
+    "year": 2,
+    "email": "aarav@example.com"
+  },
+  {
+    "id": 2,
+    "name": "Ananya Singh",
+    "age": 19,
+    "course": "Information Technology",
+    "year": 2,
+    "email": "ananya@example.com"
+  },
+  {
+    "id": 3,
+    "name": "Rohan Verma",
+    "age": 21,
+    "course": "Mechanical Engineering",
+    "year": 3,
+    "email": "rohan@example.com"
+  },
+  {
+    "id": 4,
+    "name": "Priya Gupta",
+    "age": 20,
+    "course": "Electronics Engineering",
+    "year": 2,
+    "email": "priya@example.com"
+  },
+  {
+    "id": 5,
+    "name": "Aditya Kumar",
+    "age": 22,
+    "course": "Civil Engineering",
+    "year": 4,
+    "email": "aditya@example.com"
+  },
+  {
+    "id": 6,
+    "name": "Sneha Kapoor",
+    "age": 19,
+    "course": "Computer Science",
+    "year": 1,
+    "email": "sneha@example.com"
+  },
+  {
+    "id": 7,
+    "name": "Karan Mehta",
+    "age": 21,
+    "course": "Artificial Intelligence",
+    "year": 3,
+    "email": "karan@example.com"
+  },
+  {
+    "id": 8,
+    "name": "Ishita Malhotra",
+    "age": 20,
+    "course": "Information Technology",
+    "year": 2,
+    "email": "ishita@example.com"
+  },
+  {
+    "id": 9,
+    "name": "Rahul Yadav",
+    "age": 22,
+    "course": "Electrical Engineering",
+    "year": 4,
+    "email": "rahul@example.com"
+  },
+  {
+    "id": 10,
+    "name": "Meera Joshi",
+    "age": 19,
+    "course": "Data Science",
+    "year": 1,
+    "email": "meera@example.com"
+  }
+]
