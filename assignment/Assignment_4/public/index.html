@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campus Help Desk | Student Service Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #4338ca;
+      --primary-hover: #3730a3;
+      --primary-light: #e0e7ff;
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      
+      --danger: #ef4444;
+      --danger-bg: #fef2f2;
+      --warning: #f59e0b;
+      --warning-bg: #fffbeb;
+      --success: #10b981;
+      --success-bg: #ecfdf5;
+      
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+    body { background-color: var(--bg); color: var(--text); line-height: 1.5; padding-bottom: 60px; }
+
+    /* Top Navbar */
+    .navbar {
+      background: #0f172a;
+      color: white;
+      padding: 16px 32px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow);
+    }
+    .navbar-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+    .brand-badge {
+      background: var(--primary);
+      color: white;
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    /* Main Container */
+    .main-container {
+      max-width: 1200px;
+      margin: 32px auto 0;
+      padding: 0 20px;
+    }
+
+    /* Analytics Banner */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .stat-card {
+      background: var(--surface);
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .stat-title { font-size: 13px; font-weight: 600; color: var(--text-muted); }
+    .stat-value { font-size: 28px; font-weight: 800; color: var(--text); }
+
+    /* Content Layout */
+    .app-layout {
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+
+    @media (max-width: 900px) {
+      .app-layout { grid-template-columns: 1fr; }
+    }
+
+    /* Card Panels */
+    .panel {
+      background: var(--surface);
+      border-radius: 16px;
+      padding: 28px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+    .panel-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* Form Design */
+    .form-group { margin-bottom: 18px; }
+    label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px; color: #334155; }
+    input, select, textarea {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 14px;
+      background: #f8fafc;
+      color: var(--text);
+      transition: all 0.2s ease;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: white;
+      box-shadow: 0 0 0 4px rgba(67, 56, 202, 0.12);
+    }
+    textarea { height: 110px; resize: vertical; }
+
+    /* Buttons */
+    .btn {
+      width: 100%;
+      padding: 12px 18px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 14px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-hover); transform: translateY(-1px); }
+    .btn-secondary { background: #cbd5e1; color: #1e293b; }
+    .btn-secondary:hover { background: #94a3b8; }
+    .btn-sm { width: auto; padding: 6px 12px; font-size: 12px; border-radius: 6px; }
+
+    /* Filter Toolbar */
+    .toolbar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .search-input { flex: 1; min-width: 200px; }
+
+    /* Requests List */
+    .request-card {
+      background: var(--surface);
+      border-radius: 14px;
+      padding: 22px;
+      margin-bottom: 16px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s ease;
+      position: relative;
+    }
+    .request-card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+    .card-category {
+      font-weight: 800;
+      font-size: 16px;
+      color: var(--text);
+    }
+
+    /* Status Badges */
+    .badge {
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .badge-High { background: var(--danger-bg); color: var(--danger); }
+    .badge-Medium { background: var(--warning-bg); color: var(--warning); }
+    .badge-Low { background: var(--success-bg); color: var(--success); }
+
+    .card-meta {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .card-desc {
+      font-size: 14px;
+      color: #334155;
+      background: #f8fafc;
+      padding: 14px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      border: 1px solid #f1f5f9;
+      white-space: pre-wrap;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .status-select {
+      width: auto;
+      padding: 4px 8px;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 6px;
+    }
+
+    /* Toast Container */
+    #toastContainer {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .toast {
+      background: #0f172a;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      box-shadow: var(--shadow-lg);
+      animation: slideIn 0.3s ease;
+    }
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 48px 20px;
+      color: var(--text-muted);
+      background: white;
+      border-radius: 14px;
+      border: 2px dashed var(--border);
+    }
+  </style>
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="brand">
+        🎓 Campus Help Desk <span class="brand-badge">v2.0</span>
+      </div>
+      <div style="font-size: 13px; opacity: 0.8;">Assignment 4 Project</div>
+    </div>
+  </header>
+
+  <main class="main-container">
+
+    <!-- Analytics Dashboard -->
+    <section class="stats-grid">
+      <div class="stat-card">
+        <span class="stat-title">Total Requests</span>
+        <span class="stat-value" id="statTotal">0</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-title">High Priority</span>
+        <span class="stat-value" id="statHigh" style="color: var(--danger);">0</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-title">Open Tickets</span>
+        <span class="stat-value" id="statOpen" style="color: var(--warning);">0</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-title">Resolved Rate</span>
+        <span class="stat-value" id="statResolved" style="color: var(--success);">0%</span>
+      </div>
+    </section>
+
+    <div class="app-layout">
+      <!-- Submission / Edit Panel -->
+      <section class="panel">
+        <h2 class="panel-title" id="formTitle">
+          <span>New Ticket</span>
+        </h2>
+
+        <form id="ticketForm">
+          <input type="hidden" id="ticketId">
+
+          <div class="form-group">
+            <label for="name">Student Name</label>
+            <input type="text" id="name" placeholder="e.g. Alex Morgan" required>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Student Email</label>
+            <input type="email" id="email" placeholder="alex@campus.edu" required>
+          </div>
+
+          <div class="form-group">
+            <label for="category">Category</label>
+            <select id="category" required>
+              <option value="">Select Category</option>
+              <option value="IT Support">💻 IT Support</option>
+              <option value="Hostel Maintenance">🏢 Hostel Maintenance</option>
+              <option value="Academics">📚 Academics</option>
+              <option value="Library Services">📖 Library Services</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="priority">Priority Level</label>
+            <select id="priority" required>
+              <option value="Low">🟢 Low Priority</option>
+              <option value="Medium" selected>🟡 Medium Priority</option>
+              <option value="High">🔴 High Priority</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="description">Problem Description</label>
+            <textarea id="description" placeholder="Describe your campus request in detail..." required></textarea>
+          </div>
+
+          <div style="display: flex; gap: 8px;">
+            <button type="submit" class="btn btn-primary" id="submitBtn">Submit Ticket</button>
+            <button type="button" class="btn btn-secondary" id="cancelBtn" style="display:none;" onclick="resetForm()">Cancel</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Tickets Directory Panel -->
+      <section>
+        <!-- Search & Filters -->
+        <div class="toolbar">
+          <input type="text" id="searchInput" class="search-input" placeholder="🔍 Search requests by name, description..." oninput="filterRequests()">
+          <select id="filterPriority" style="width: auto;" onchange="filterRequests()">
+            <option value="All">All Priorities</option>
+            <option value="High">High Priority</option>
+            <option value="Medium">Medium Priority</option>
+            <option value="Low">Low Priority</option>
+          </select>
+        </div>
+
+        <div id="requestsList">
+          <div class="empty-state">Loading tickets...</div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <div id="toastContainer"></div>
+
+  <script>
+    const API = '/api/requests';
+    let allRequests = [];
+
+    document.addEventListener('DOMContentLoaded', getRequests);
+
+    // Toast Notification System
+    function showToast(msg) {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.innerText = msg;
+      container.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    }
+
+    // GET /api/requests
+    async function getRequests() {
+      try {
+        const res = await fetch(API);
+        allRequests = await res.json();
+        updateAnalytics();
+        filterRequests();
+      } catch (err) {
+        document.getElementById('requestsList').innerHTML = '<div class="empty-state">Failed to load data from server.</div>';
+      }
+    }
+
+    // Update Banner Stats
+    function updateAnalytics() {
+      const total = allRequests.length;
+      const high = allRequests.filter(r => r.priority === 'High').length;
+      const open = allRequests.filter(r => (r.status || 'Open') === 'Open').length;
+      const resolved = allRequests.filter(r => r.status === 'Resolved').length;
+
+      document.getElementById('statTotal').innerText = total;
+      document.getElementById('statHigh').innerText = high;
+      document.getElementById('statOpen').innerText = open;
+      document.getElementById('statResolved').innerText = total ? Math.round((resolved / total) * 100) + '%' : '0%';
+    }
+
+    // Filter Logic
+    function filterRequests() {
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      const priority = document.getElementById('filterPriority').value;
+
+      const filtered = allRequests.filter(r => {
+        const matchesSearch = r.name.toLowerCase().includes(search) || 
+                              r.description.toLowerCase().includes(search) ||
+                              r.category.toLowerCase().includes(search);
+        const matchesPriority = priority === 'All' || r.priority === priority;
+        return matchesSearch && matchesPriority;
+      });
+
+      renderRequests(filtered);
+    }
+
+    function renderRequests(data) {
+      const list = document.getElementById('requestsList');
+
+      if (!data.length) {
+        list.innerHTML = '<div class="empty-state">No tickets match your query.</div>';
+        return;
+      }
+
+      list.innerHTML = data.map(r => `
+        <div class="request-card">
+          <div class="card-header">
+            <span class="card-category">${escapeHTML(r.category)}</span>
+            <span class="badge badge-${r.priority}">${r.priority}</span>
+          </div>
+          
+          <div class="card-meta">
+            <span>👤 <strong>${escapeHTML(r.name)}</strong></span>
+            <span>✉️ ${escapeHTML(r.email)}</span>
+          </div>
+
+          <div class="card-desc">${escapeHTML(r.description)}</div>
+
+          <div class="card-footer">
+            <select class="status-select" onchange="updateStatus(${r.id}, this.value)">
+              <option value="Open" ${r.status === 'Open' || !r.status ? 'selected' : ''}>Status: Open</option>
+              <option value="In Progress" ${r.status === 'In Progress' ? 'selected' : ''}>Status: In Progress</option>
+              <option value="Resolved" ${r.status === 'Resolved' ? 'selected' : ''}>Status: Resolved</option>
+            </select>
+
+            <div style="display: flex; gap: 6px;">
+              <button class="btn btn-secondary btn-sm" onclick="editItem(${r.id})">Edit</button>
+              <button class="btn btn-sm" style="background: #fee2e2; color: #991b1b;" onclick="deleteItem(${r.id})">Delete</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // POST / PUT submit handler
+    document.getElementById('ticketForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('ticketId').value;
+      const body = {
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        category: document.getElementById('category').value,
+        priority: document.getElementById('priority').value,
+        description: document.getElementById('description').value
+      };
+
+      const res = await fetch(id ? `${API}/${id}` : API, {
+        method: id ? 'PUT' : 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+
+      if (res.ok) {
+        showToast(id ? 'Ticket updated successfully!' : 'Ticket submitted successfully!');
+        resetForm();
+        getRequests();
+      }
+    });
+
+    // Update Status
+    async function updateStatus(id, newStatus) {
+      const item = allRequests.find(r => r.id === id);
+      if (!item) return;
+
+      await fetch(`${API}/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...item, status: newStatus })
+      });
+
+      showToast(`Status changed to ${newStatus}`);
+      getRequests();
+    }
+
+    // GET /api/requests/:id
+    async function editItem(id) {
+      const res = await fetch(`${API}/${id}`);
+      const r = await res.json();
+
+      document.getElementById('ticketId').value = r.id;
+      document.getElementById('name').value = r.name;
+      document.getElementById('email').value = r.email;
+      document.getElementById('category').value = r.category;
+      document.getElementById('priority').value = r.priority;
+      document.getElementById('description').value = r.description;
+      
+      document.getElementById('formTitle').innerText = 'Edit Ticket #' + r.id;
+      document.getElementById('submitBtn').innerText = 'Update Ticket';
+      document.getElementById('cancelBtn').style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // DELETE /api/requests/:id
+    async function deleteItem(id) {
+      if (confirm('Delete this ticket permanently?')) {
+        await fetch(`${API}/${id}`, { method: 'DELETE' });
+        showToast('Ticket deleted.');
+        getRequests();
+      }
+    }
+
+    function resetForm() {
+      document.getElementById('ticketForm').reset();
+      document.getElementById('ticketId').value = '';
+      document.getElementById('formTitle').innerText = 'New Ticket';
+      document.getElementById('submitBtn').innerText = 'Submit Ticket';
+      document.getElementById('cancelBtn').style.display = 'none';
+    }
+
+    function escapeHTML(str) {
+      return str.replace(/[&<>'"]/g, 
+        tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+      );
+    }
+  </script>
+</body>
+</html>
